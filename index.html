@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#11110f" />
+  <meta name="description" content="PAWS & WHISKERS — a premium pet shop for food, toys, grooming, accessories and everything your best friend deserves." />
+  <meta name="keywords" content="pet shop, dog food, cat food, pet grooming, pet accessories, pet toys, pets" />
+  <meta property="og:title" content="PAWS & WHISKERS — Everything They Love" />
+  <meta property="og:description" content="Premium pet essentials, joyful discoveries and grooming under one roof." />
+  <meta property="og:type" content="website" />
+  <title>PAWS & WHISKERS — Everything They Love</title>
+
+  <style>
+    :root{
+      --bg:#0d0e0d;
+      --surface:#151715;
+      --surface-2:#1c1f1c;
+      --ink:#f6f4ed;
+      --muted:#a9ada6;
+      --line:rgba(255,255,255,.12);
+      --cream:#f3e9d2;
+      --lime:#c8ff52;
+      --orange:#ff8d5c;
+      --purple:#bba7ff;
+      --dark-ink:#171816;
+      --shadow:0 24px 70px rgba(0,0,0,.28);
+      --radius:28px;
+      --nav-h:82px;
+      --max:1320px;
+    }
+
+    html.light{
+      --bg:#f5f1e8;
+      --surface:#fffdf7;
+      --surface-2:#eee9dd;
+      --ink:#171816;
+      --muted:#656a63;
+      --line:rgba(23,24,22,.12);
+      --cream:#171816;
+      --dark-ink:#f7f3e9;
+      --shadow:0 24px 70px rgba(50,43,25,.12);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      overflow-x:hidden;
+      transition:background .35s ease,color .35s ease;
+    }
+    body.no-scroll{overflow:hidden}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    img{display:block;max-width:100%}
+    ::selection{background:var(--lime);color:#111}
+
+    .preloader{
+      position:fixed;inset:0;z-index:9999;
+      display:grid;place-items:center;
+      background:#0d0e0d;color:#f6f4ed;
+      transition:opacity .7s ease,visibility .7s ease;
+    }
+    .preloader.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-inner{text-align:center}
+    .paw-loader{
+      width:72px;height:72px;margin:auto auto 18px;
+      position:relative;
+      animation:float 1.4s ease-in-out infinite;
+    }
+    .paw-loader span{
+      position:absolute;background:var(--lime);border-radius:50%;
+      box-shadow:0 0 24px rgba(200,255,82,.3);
+    }
+    .paw-loader .a{width:18px;height:25px;left:10px;top:11px;transform:rotate(-25deg)}
+    .paw-loader .b{width:18px;height:25px;right:10px;top:11px;transform:rotate(25deg)}
+    .paw-loader .c{width:17px;height:23px;left:24px;top:2px}
+    .paw-loader .d{width:17px;height:23px;right:24px;top:2px}
+    .paw-loader .e{width:42px;height:34px;left:15px;bottom:5px;border-radius:50% 50% 45% 45%}
+    .loader-label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#a9ada6}
+
+    .cursor-glow{
+      position:fixed;width:360px;height:360px;border-radius:50%;
+      pointer-events:none;z-index:0;
+      background:radial-gradient(circle,rgba(200,255,82,.09),transparent 66%);
+      transform:translate(-50%,-50%);
+      mix-blend-mode:screen;
+    }
+
+    .nav{
+      position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+      z-index:1000;
+      display:flex;align-items:center;
+      padding:0 clamp(18px,4vw,54px);
+      background:linear-gradient(180deg,rgba(13,14,13,.92),rgba(13,14,13,.45),transparent);
+      backdrop-filter:blur(8px);
+    }
+    html.light .nav{background:linear-gradient(180deg,rgba(245,241,232,.95),rgba(245,241,232,.5),transparent)}
+    .nav-inner{width:100%;max-width:1440px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:25px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.055em;font-size:18px}
+    .brand-mark{
+      width:39px;height:39px;border-radius:13px;display:grid;place-items:center;
+      background:var(--lime);color:#111;font-size:19px;
+      transform:rotate(-8deg);box-shadow:0 10px 30px rgba(200,255,82,.18)
+    }
+    .nav-links{display:flex;gap:28px;align-items:center}
+    .nav-links a{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);transition:color .25s}
+    .nav-links a:hover{color:var(--ink)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .icon-btn,.menu-btn{
+      border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);
+      width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+      transition:.25s;
+    }
+    .icon-btn:hover,.menu-btn:hover{transform:translateY(-2px);border-color:rgba(200,255,82,.5)}
+    .cart-btn{position:relative}
+    .cart-count{
+      position:absolute;right:-2px;top:-3px;min-width:17px;height:17px;padding:0 4px;
+      border-radius:20px;background:var(--lime);color:#111;font-size:9px;font-weight:900;display:grid;place-items:center
+    }
+    .menu-btn{display:none}
+
+    .hero{
+      min-height:100svh;position:relative;display:grid;place-items:center;
+      overflow:hidden;padding:110px 22px 65px;
+      isolation:isolate;
+    }
+    .hero-media{
+      position:absolute;inset:0;z-index:-3;overflow:hidden;
+    }
+    .hero-media::before{
+      content:"";position:absolute;inset:0;
+      background-image:url("https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=2200&q=88");
+      background-size:cover;background-position:center 48%;
+      transform:scale(1.06);
+      animation:heroZoom 13s ease-in-out infinite alternate;
+      filter:saturate(.78) contrast(1.06);
+    }
+    .hero-media::after{
+      content:"";position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 72% 40%,transparent 0 16%,rgba(0,0,0,.1) 45%,rgba(0,0,0,.78) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.58) 0%,rgba(0,0,0,.1) 38%,rgba(0,0,0,.76) 100%);
+    }
+    .hero-grid{
+      position:absolute;inset:0;z-index:-1;opacity:.14;
+      background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);
+      background-size:80px 80px;
+      mask-image:linear-gradient(to bottom,black,transparent 82%);
+    }
+    .hero-content{width:min(var(--max),100%);margin:auto;position:relative}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;
+      padding:9px 13px;border:1px solid rgba(255,255,255,.22);border-radius:100px;
+      background:rgba(0,0,0,.2);backdrop-filter:blur(12px);
+      color:#eee;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+      animation:rise .9s .2s both;
+    }
+    .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+    .hero-title{
+      max-width:970px;margin:22px 0 0;
+      font-size:clamp(58px,9.8vw,150px);
+      line-height:.8;letter-spacing:-.075em;font-weight:950;
+      text-transform:uppercase;
+      animation:rise 1s .35s both;
+    }
+    .hero-title .stroke{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.78)}
+    .hero-title .lime{color:var(--lime)}
+    .hero-bottom{
+      display:flex;justify-content:space-between;align-items:end;gap:30px;margin-top:42px;
+      animation:rise 1s .5s both;
+    }
+    .hero-copy{max-width:470px;color:#d5d7d0;font-size:15px;line-height:1.65}
+    .hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      min-height:50px;padding:0 20px;border-radius:100px;border:1px solid var(--line);
+      background:rgba(255,255,255,.06);color:var(--ink);font-size:11px;
+      text-transform:uppercase;letter-spacing:.14em;font-weight:800;transition:.3s;
+      backdrop-filter:blur(12px);
+    }
+    .btn:hover{transform:translateY(-3px);border-color:rgba(200,255,82,.55)}
+    .btn-primary{background:var(--lime);color:#111;border-color:var(--lime)}
+    .btn-primary:hover{box-shadow:0 14px 45px rgba(200,255,82,.2)}
+    .hero-stamp{
+      position:absolute;right:2%;top:50%;transform:translateY(-50%);
+      width:145px;height:145px;border:1px solid rgba(255,255,255,.32);border-radius:50%;
+      display:grid;place-items:center;animation:spin 20s linear infinite;
+      background:rgba(0,0,0,.15);backdrop-filter:blur(5px);
+    }
+    .hero-stamp::before{content:"✦";font-size:34px;color:var(--lime)}
+    .hero-stamp::after{
+      content:"GOOD DOG • GOOD CAT • GOOD LIFE • ";
+      position:absolute;inset:11px;border-radius:50%;display:grid;place-items:center;
+      font-size:8px;letter-spacing:.15em;color:#fff;text-align:center
+    }
+    .scroll-note{
+      position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:7px;color:#d5d7d0;
+      font-size:8px;text-transform:uppercase;letter-spacing:.22em;opacity:.8
+    }
+    .scroll-line{height:35px;width:1px;background:linear-gradient(var(--lime),transparent);animation:pulse 1.5s infinite}
+
+    .section{padding:clamp(75px,10vw,145px) clamp(18px,4vw,54px);position:relative}
+    .section-inner{max-width:var(--max);margin:auto}
+    .section-head{display:flex;justify-content:space-between;gap:35px;align-items:end;margin-bottom:45px}
+    .kicker{font-size:10px;text-transform:uppercase;letter-spacing:.22em;color:var(--muted);margin-bottom:14px}
+    .section-title{font-size:clamp(38px,6vw,82px);line-height:.9;letter-spacing:-.07em;margin:0;max-width:800px}
+    .section-intro{max-width:380px;color:var(--muted);font-size:14px;line-height:1.7}
+
+    .ticker{
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      overflow:hidden;white-space:nowrap;padding:15px 0;
+    }
+    .ticker-track{display:inline-flex;gap:40px;animation:marquee 24s linear infinite}
+    .ticker span{font-size:11px;text-transform:uppercase;letter-spacing:.19em;color:var(--muted)}
+    .ticker b{color:var(--lime);font-size:17px}
+
+    .categories{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+    .cat{
+      min-height:340px;border-radius:var(--radius);overflow:hidden;position:relative;
+      background:var(--surface);border:1px solid var(--line);isolation:isolate;
+      transition:transform .4s,border-color .4s;
+    }
+    .cat:hover{transform:translateY(-8px);border-color:rgba(200,255,82,.35)}
+    .cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s}
+    .cat:hover img{transform:scale(1.07)}
+    .cat::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(0,0,0,.82))}
+    .cat-info{position:absolute;z-index:2;left:22px;right:22px;bottom:22px}
+    .cat-num{font-size:10px;color:var(--lime);letter-spacing:.15em}
+    .cat h3{font-size:28px;letter-spacing:-.05em;margin:8px 0 6px}
+    .cat p{font-size:12px;color:#d0d3cd;margin:0}
+
+    .products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .product{
+      background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:10px;position:relative;
+      transition:.35s;overflow:hidden;
+    }
+    .product:hover{transform:translateY(-7px);box-shadow:var(--shadow)}
+    .product-image{height:280px;border-radius:18px;overflow:hidden;position:relative;background:var(--surface-2)}
+    .product-image img{width:100%;height:100%;object-fit:cover;transition:.65s}
+    .product:hover .product-image img{transform:scale(1.05)}
+    .badge{
+      position:absolute;top:13px;left:13px;background:var(--lime);color:#111;border-radius:100px;
+      padding:7px 10px;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.13em;z-index:2
+    }
+    .product-info{padding:16px 8px 9px}
+    .product-meta{font-size:9px;color:var(--muted);letter-spacing:.13em;text-transform:uppercase}
+    .product h3{font-size:18px;letter-spacing:-.04em;margin:7px 0 14px}
+    .product-row{display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:900;font-size:17px}
+    .add{
+      width:40px;height:40px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);
+      display:grid;place-items:center;font-size:18px;transition:.25s
+    }
+    .add:hover{background:var(--lime);color:#111;transform:rotate(90deg)}
+
+    .split{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;align-items:stretch}
+    .about-image{min-height:650px;border-radius:var(--radius);overflow:hidden;position:relative}
+    .about-image img{width:100%;height:100%;object-fit:cover}
+    .about-image::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent 55%)}
+    .about-badge{
+      position:absolute;left:24px;bottom:24px;z-index:2;background:var(--lime);color:#111;
+      padding:18px;border-radius:20px;font-weight:900;max-width:170px;font-size:17px;line-height:1
+    }
+    .about-panel{
+      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(28px,4vw,60px);
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .about-panel h2{font-size:clamp(45px,5vw,75px);line-height:.88;letter-spacing:-.07em;margin:0}
+    .about-panel p{color:var(--muted);line-height:1.8;font-size:14px;max-width:470px}
+    .facts{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);margin-top:35px}
+    .fact{padding:20px 10px 5px 0;border-bottom:1px solid var(--line)}
+    .fact strong{font-size:29px;letter-spacing:-.05em;display:block}
+    .fact span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .service{border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:30px;min-height:280px;position:relative;overflow:hidden;transition:.35s}
+    .service:hover{border-color:rgba(200,255,82,.35);transform:translateY(-5px)}
+    .service-icon{font-size:40px}
+    .service h3{font-size:27px;letter-spacing:-.06em;margin:55px 0 10px}
+    .service p{color:var(--muted);font-size:13px;line-height:1.7;max-width:350px}
+    .service-number{position:absolute;right:23px;top:20px;font-size:10px;color:var(--muted)}
+
+    .gallery{display:grid;grid-template-columns:1.3fr .7fr .7fr;grid-template-rows:260px 260px;gap:12px}
+    .gallery-item{border-radius:24px;overflow:hidden;position:relative;background:var(--surface-2)}
+    .gallery-item:first-child{grid-row:span 2}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:.65s}
+    .gallery-item:hover img{transform:scale(1.06)}
+    .gallery-item::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,.55))}
+    .gallery-label{position:absolute;z-index:2;left:18px;bottom:16px;font-size:9px;letter-spacing:.16em;text-transform:uppercase}
+
+    .reviews-wrap{display:grid;grid-template-columns:.7fr 1.3fr;gap:40px;align-items:start}
+    .rating-card{background:var(--lime);color:#111;border-radius:var(--radius);padding:35px;position:sticky;top:110px}
+    .rating-card .stars{font-size:24px;letter-spacing:3px}
+    .rating-card strong{font-size:70px;line-height:1;display:block;letter-spacing:-.07em;margin:20px 0 8px}
+    .rating-card p{font-size:12px;line-height:1.6;max-width:250px}
+    .review-list{display:grid;gap:12px}
+    .review{padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--surface)}
+    .review-top{display:flex;justify-content:space-between;gap:15px}
+    .review-name{font-weight:800}
+    .review-date{font-size:10px;color:var(--muted)}
+    .review-stars{color:#e9b84a;font-size:13px;margin:14px 0}
+    .review p{color:var(--muted);font-size:14px;line-height:1.7;margin:0}
+
+    .cta{
+      padding:clamp(60px,8vw,110px) clamp(18px,4vw,54px);
+    }
+    .cta-card{
+      max-width:var(--max);margin:auto;min-height:470px;border-radius:35px;overflow:hidden;position:relative;
+      display:flex;align-items:center;padding:clamp(30px,6vw,80px);isolation:isolate;
+      background-image:url("https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=2200&q=88");
+      background-size:cover;background-position:center;
+    }
+    .cta-card::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.87),rgba(0,0,0,.32),rgba(0,0,0,.2))}
+    .cta-content{position:relative;z-index:2;max-width:700px}
+    .cta-content h2{font-size:clamp(48px,7vw,100px);line-height:.85;letter-spacing:-.08em;margin:0 0 24px}
+    .cta-content p{color:#d3d6ce;line-height:1.7;max-width:470px;margin-bottom:28px}
+
+    footer{padding:35px clamp(18px,4vw,54px) 30px;border-top:1px solid var(--line)}
+    .footer-inner{max-width:var(--max);margin:auto}
+    .footer-top{display:flex;justify-content:space-between;gap:30px;align-items:start}
+    .footer-brand{font-size:30px;font-weight:950;letter-spacing:-.06em}
+    .footer-links{display:flex;gap:28px;flex-wrap:wrap}
+    .footer-links a{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+    .footer-bottom{border-top:1px solid var(--line);margin-top:35px;padding-top:18px;display:flex;justify-content:space-between;color:var(--muted);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+
+    .mobile-menu{
+      position:fixed;inset:0;z-index:900;display:none;padding:100px 25px 30px;
+      background:rgba(13,14,13,.97);backdrop-filter:blur(20px)
+    }
+    html.light .mobile-menu{background:rgba(245,241,232,.98)}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:block;font-size:clamp(38px,11vw,70px);font-weight:900;letter-spacing:-.07em;line-height:.95;padding:10px 0;border-bottom:1px solid var(--line)}
+    .mobile-menu small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-top:25px}
+
+    .cart-drawer{
+      position:fixed;right:0;top:0;bottom:0;width:min(430px,100%);
+      background:var(--surface);border-left:1px solid var(--line);z-index:1500;
+      transform:translateX(105%);transition:.45s cubic-bezier(.2,.8,.2,1);padding:25px;
+      display:flex;flex-direction:column;
+    }
+    .cart-drawer.open{transform:none}
+    .cart-head{display:flex;justify-content:space-between;align-items:center;padding:8px 0 25px;border-bottom:1px solid var(--line)}
+    .cart-head h3{margin:0;font-size:26px;letter-spacing:-.06em}
+    .close{border:0;background:none;color:var(--ink);font-size:25px}
+    .cart-items{overflow:auto;flex:1;padding:15px 0}
+    .cart-empty{color:var(--muted);font-size:13px;line-height:1.7;padding:30px 0}
+    .cart-item{display:grid;grid-template-columns:65px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .cart-item img{width:65px;height:65px;border-radius:14px;object-fit:cover}
+    .cart-item h4{font-size:13px;margin:0 0 5px}
+    .cart-item p{font-size:11px;color:var(--muted);margin:0}
+    .remove{background:none;border:0;color:var(--muted);font-size:12px}
+    .cart-foot{border-top:1px solid var(--line);padding-top:18px}
+    .subtotal{display:flex;justify-content:space-between;font-weight:900;font-size:18px;margin-bottom:15px}
+    .full{width:100%}
+
+    .toast{
+      position:fixed;left:50%;bottom:25px;z-index:3000;transform:translate(-50%,120px);
+      background:var(--lime);color:#111;padding:13px 18px;border-radius:100px;font-size:11px;font-weight:900;
+      box-shadow:0 15px 40px rgba(0,0,0,.25);transition:.35s
+    }
+    .toast.show{transform:translate(-50%,0)}
+
+    .reveal{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @keyframes heroZoom{from{transform:scale(1.06)}to{transform:scale(1.13)}}
+    @keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+    @keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+    @keyframes pulse{50%{opacity:.25;transform:scaleY(.65)}}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+    @keyframes float{50%{transform:translateY(-8px)}}
+
+    @media(max-width:1050px){
+      .nav-links{display:none}.menu-btn{display:grid}
+      .hero-stamp{display:none}
+      .categories,.products{grid-template-columns:repeat(2,1fr)}
+      .about-image{min-height:500px}
+    }
+    @media(max-width:760px){
+      :root{--nav-h:72px}
+      .hero{padding-top:95px}
+      .hero-media::before{background-position:58% center}
+      .hero-title{font-size:clamp(55px,18vw,105px)}
+      .hero-bottom{display:block;margin-top:28px}
+      .hero-copy{font-size:13px;margin-bottom:20px}
+      .scroll-note{display:none}
+      .section{padding-top:80px;padding-bottom:80px}
+      .section-head{display:block}
+      .section-intro{margin-top:20px}
+      .categories,.products,.services,.split,.reviews-wrap{grid-template-columns:1fr}
+      .cat{min-height:380px}
+      .product-image{height:310px}
+      .about-image{min-height:450px}
+      .gallery{grid-template-columns:1fr 1fr;grid-template-rows:220px 220px 220px}
+      .gallery-item:first-child{grid-row:span 2}
+      .reviews-wrap{gap:20px}
+      .rating-card{position:static}
+      .footer-top,.footer-bottom{display:block}
+      .footer-links{margin-top:25px}
+      .footer-bottom>*{margin:8px 0}
+    }
+    @media(max-width:460px){
+      .categories,.products{grid-template-columns:1fr}
+      .cat{min-height:330px}
+      .hero-buttons .btn{width:100%}
+      .hero-title .stroke{-webkit-text-stroke:.7px rgba(255,255,255,.75)}
+      .gallery{display:grid;grid-template-columns:1fr;grid-template-rows:300px 220px 220px 220px}
+      .gallery-item:first-child{grid-row:auto}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+      .reveal{opacity:1;transform:none}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =========================================================
+       PAWS & WHISKERS — SINGLE-FILE PET SHOP
+       GitHub/Vercel ready: upload this file as index.html.
+       Edit brand/contact/product data in the marked JS section.
+       ========================================================= -->
+
+  <div class="preloader" id="preloader">
+    <div class="loader-inner">
+      <div class="paw-loader" aria-hidden="true">
+        <span class="a"></span><span class="b"></span><span class="c"></span><span class="d"></span><span class="e"></span>
+      </div>
+      <div class="loader-label">Preparing happy tails</div>
+    </div>
+  </div>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#home" aria-label="Paws and Whiskers home">
+        <span class="brand-mark">🐾</span>
+        <span>PAWS &amp; WHISKERS</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#shop">Shop</a>
+        <a href="#services">Services</a>
+        <a href="#story">Our Story</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark mode">☼</button>
+        <button class="icon-btn cart-btn" id="cartOpen" aria-label="Open shopping cart">🛒<span class="cart-count" id="cartCount">0</span></button>
+        <button class="menu-btn" id="menuOpen" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#shop">Shop</a>
+    <a href="#services">Services</a>
+    <a href="#story">Our Story</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#reviews">Reviews</a>
+    <small>Happy pets. Happy humans. Every day.</small>
+  </div>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <div class="eyebrow"><i></i> Premium pet essentials · grooming · joy</div>
+
+        <h1 class="hero-title">
+          Everything<br>
+          <span class="stroke">they</span> <span class="lime">love.</span>
+        </h1>
+
+        <div class="hero-bottom">
+          <p class="hero-copy">
+            From nutritious meals and clever toys to everyday accessories and gentle grooming,
+            we bring together the good stuff your four-legged family actually wants.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#shop">Explore the shop ↗</a>
+            <a class="btn" href="#services">Book grooming</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stamp" aria-hidden="true"></div>
+
+      <div class="scroll-note">
+        <span>Scroll to discover</span>
+        <span class="scroll-line"></span>
+      </div>
+    </section>
+
+    <div class="ticker" aria-label="Store highlights">
+      <div class="ticker-track">
+        <span>Premium food</span><b>✦</b><span>Daily essentials</span><b>✦</b><span>Gentle grooming</span><b>✦</b><span>Playful toys</span><b>✦</b><span>Happy tails</span><b>✦</b>
+        <span>Premium food</span><b>✦</b><span>Daily essentials</span><b>✦</b><span>Gentle grooming</span><b>✦</b><span>Playful toys</span><b>✦</b><span>Happy tails</span><b>✦</b>
+      </div>
+    </div>
+
+    <section class="section" id="shop">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">01 / Shop by mood</div>
+            <h2 class="section-title">Pick their<br>happy place.</h2>
+          </div>
+          <p class="section-intro">A curated mix for dogs, cats and the people who spoil them. No boring aisles. Just useful things and little joys.</p>
+        </div>
+
+        <div class="categories reveal">
+          <a class="cat" href="#products">
+            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=1000&q=85" alt="Happy dog">
+            <div class="cat-info"><div class="cat-num">01 / DOGS</div><h3>Good Dog Club</h3><p>Food, walks, toys &amp; everyday wins.</p></div>
+          </a>
+          <a class="cat" href="#products">
+            <img src="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=1000&q=85" alt="Cat looking at camera">
+            <div class="cat-info"><div class="cat-num">02 / CATS</div><h3>Cat Energy</h3><p>Comfort, enrichment and premium care.</p></div>
+          </a>
+          <a class="cat" href="#products">
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=1000&q=85" alt="Dog outdoors">
+            <div class="cat-info"><div class="cat-num">03 / OUTDOORS</div><h3>Go Outside</h3><p>Harnesses, leads and adventure gear.</p></div>
+          </a>
+          <a class="cat" href="#services">
+            <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1000&q=85" alt="Dog being cared for">
+            <div class="cat-info"><div class="cat-num">04 / CARE</div><h3>Fresh &amp; Fluffy</h3><p>Grooming and care made gentle.</p></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products" style="padding-top:20px">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">02 / The good stuff</div>
+            <h2 class="section-title">Best sellers,<br>best buddies.</h2>
+          </div>
+          <p class="section-intro">Add a few favourites to your cart. This demo cart works entirely in the browser and needs no backend.</p>
+        </div>
+
+        <div class="products" id="productGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="story">
+      <div class="section-inner">
+        <div class="split">
+          <div class="about-image reveal">
+            <img src="https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?auto=format&fit=crop&w=1500&q=88" alt="Dog enjoying time with its owner" loading="lazy">
+            <div class="about-badge">Made for the<br>whole family. ♥</div>
+          </div>
+          <div class="about-panel reveal">
+            <div>
+              <div class="kicker">03 / Why us</div>
+              <h2>Pets first.<br>Always.</h2>
+              <p>
+                We believe a pet shop should feel less like a store and more like a place you
+                want to visit together. Our range is selected around quality, comfort, enrichment
+                and the tiny moments that make life with a pet brilliant.
+              </p>
+              <p>
+                From first puppy days to senior snuggles, we are here with practical advice,
+                thoughtful products and genuinely friendly care.
+              </p>
+            </div>
+            <div class="facts">
+              <div class="fact"><strong>5K+</strong><span>Happy pet parents</span></div>
+              <div class="fact"><strong>4.9/5</strong><span>Average rating</span></div>
+              <div class="fact"><strong>7 days</strong><span>Open every week</span></div>
+              <div class="fact"><strong>100%</strong><span>Tail-wag approved</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">04 / More than a shop</div>
+            <h2 class="section-title">Care that<br>feels good.</h2>
+          </div>
+          <p class="section-intro">Useful services for busy humans and pets who deserve a little extra attention.</p>
+        </div>
+
+        <div class="services">
+          <article class="service reveal">
+            <div class="service-number">01</div>
+            <div class="service-icon">✂️</div>
+            <h3>Gentle Grooming</h3>
+            <p>Baths, brushing, nail care and tidy-ups delivered with patience and pet-friendly handling.</p>
+            <a class="btn" href="#contact" style="margin-top:15px">Book a visit →</a>
+          </article>
+          <article class="service reveal">
+            <div class="service-number">02</div>
+            <div class="service-icon">🥣</div>
+            <h3>Food Guidance</h3>
+            <p>Need help choosing? Tell us your pet's age, size and routine and we can point you toward suitable options.</p>
+            <a class="btn" href="#contact" style="margin-top:15px">Ask us →</a>
+          </article>
+          <article class="service reveal">
+            <div class="service-number">03</div>
+            <div class="service-icon">🚚</div>
+            <h3>Local Delivery</h3>
+            <p>Quick local delivery for the essentials you cannot run out of — food, litter, treats and more.</p>
+            <a class="btn" href="#contact" style="margin-top:15px">Order on WhatsApp →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">05 / Pet life</div>
+            <h2 class="section-title">A little<br>chaos. A lot of love.</h2>
+          </div>
+          <p class="section-intro">A visual wall of the everyday moments we live for: muddy paws, soft naps, big walks and ridiculous amounts of personality.</p>
+        </div>
+
+        <div class="gallery reveal">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=1300&q=88" alt="Dog outdoors" loading="lazy">
+            <span class="gallery-label">Adventure mode</span>
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=900&q=88" alt="Cat relaxing" loading="lazy">
+            <span class="gallery-label">Nap department</span>
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=900&q=88" alt="Dog and person" loading="lazy">
+            <span class="gallery-label">Best friends</span>
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=900&q=88" alt="Cat close-up" loading="lazy">
+            <span class="gallery-label">Tiny boss</span>
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=900&q=88" alt="Playful dog" loading="lazy">
+            <span class="gallery-label">Play time</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reviews">
+      <div class="section-inner">
+        <div class="reviews-wrap">
+          <div class="rating-card reveal">
+            <div class="kicker" style="color:#222">Pet parent rating</div>
+            <div class="stars">★★★★★</div>
+            <strong>4.9</strong>
+            <p>Built as a polished demo store. Replace these sample testimonials with your real Google/Instagram/customer reviews before launch.</p>
+          </div>
+
+          <div class="review-list">
+            <article class="review reveal">
+              <div class="review-top"><span class="review-name">Aarav &amp; Bruno</span><span class="review-date">Pet parent</span></div>
+              <div class="review-stars">★★★★★</div>
+              <p>“The team helped us pick a harness that actually fits. Bruno walked out looking like he owned the place.”</p>
+            </article>
+            <article class="review reveal">
+              <div class="review-top"><span class="review-name">Meera &amp; Luna</span><span class="review-date">Pet parent</span></div>
+              <div class="review-stars">★★★★★</div>
+              <p>“Beautiful store, lovely grooming service and the cat section is dangerous for my wallet — in the best way.”</p>
+            </article>
+            <article class="review reveal">
+              <div class="review-top"><span class="review-name">Rohan &amp; Milo</span><span class="review-date">Pet parent</span></div>
+              <div class="review-stars">★★★★★</div>
+              <p>“Fast delivery for food and treats. The website makes ordering ridiculously easy.”</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="cta-card reveal">
+        <div class="cta-content">
+          <div class="kicker" style="color:#d0d3cd">06 / Come say hi</div>
+          <h2>Let's make<br>tails wag.</h2>
+          <p>Visit the shop, message us for a recommendation, or book a grooming slot. Replace the demo contact details below with your real business information.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" id="whatsappCta" href="#" target="_blank" rel="noopener">WhatsApp us ↗</a>
+            <a class="btn" href="tel:+919999999999">Call +91 99999 99999</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">PAWS &amp; WHISKERS</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:8px">Everything they love. All in one place.</div>
+        </div>
+        <div class="footer-links">
+          <a href="#home">Home</a><a href="#shop">Shop</a><a href="#services">Services</a><a href="#story">About</a><a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Paws &amp; Whiskers</span>
+        <span>Designed with ♥ for pets</span>
+        <span>Single-file · GitHub · Vercel</span>
+      </div>
+    </div>
+  </footer>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+    <div class="cart-head">
+      <h3>Your cart</h3>
+      <button class="close" id="cartClose" aria-label="Close cart">×</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">Your cart is empty.<br><br>Add something your best friend will love.</div>
+    </div>
+    <div class="cart-foot">
+      <div class="subtotal"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+      <button class="btn btn-primary full" id="checkoutBtn">Order via WhatsApp ↗</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast">Added to cart</div>
+
+  <script>
+    /* =========================================================
+       STORE DATA — EDIT THESE VALUES FOR YOUR CLIENT
+       ========================================================= */
+    const PRODUCTS = [
+      {
+        id: 1, name: "Everyday Crunch", category: "DOG FOOD",
+        price: 899, badge: "Bestseller",
+        image: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: 2, name: "Salmon Cat Feast", category: "CAT FOOD",
+        price: 749, badge: "Popular",
+        image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: 3, name: "Cloud Soft Toy", category: "TOYS",
+        price: 399, badge: "New",
+        image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: 4, name: "Adventure Harness", category: "ACCESSORIES",
+        price: 1299, badge: "Favourite",
+        image: "https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=900&q=85"
+      }
+    ];
+
+    /* Change this to the business WhatsApp number, digits only. */
+    const WHATSAPP_NUMBER = "919999999999";
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    const productGrid = $("#productGrid");
+    const cartDrawer = $("#cartDrawer");
+    const cartItems = $("#cartItems");
+    const cartCount = $("#cartCount");
+    const subtotal = $("#subtotal");
+    const toast = $("#toast");
+
+    let cart = JSON.parse(localStorage.getItem("paws_cart") || "[]");
+
+    function money(value){
+      return new Intl.NumberFormat("en-IN", {
+        style:"currency", currency:"INR", maximumFractionDigits:0
+      }).format(value);
+    }
+
+    function renderProducts(){
+      productGrid.innerHTML = PRODUCTS.map(p => `
+        <article class="product reveal">
+          <div class="product-image">
+            <span class="badge">${p.badge}</span>
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-meta">${p.category}</div>
+            <h3>${p.name}</h3>
+            <div class="product-row">
+              <span class="price">${money(p.price)}</span>
+              <button class="add" data-add="${p.id}" aria-label="Add ${p.name} to cart">+</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      $$("[data-add]").forEach(btn => {
+        btn.addEventListener("click", () => addToCart(Number(btn.dataset.add)));
+      });
+      observeReveals();
+    }
+
+    function saveCart(){
+      localStorage.setItem("paws_cart", JSON.stringify(cart));
+    }
+
+    function addToCart(id){
+      const existing = cart.find(item => item.id === id);
+      if(existing) existing.qty++;
+      else cart.push({id, qty:1});
+      saveCart();
+      renderCart();
+      showToast("Added to cart ✓");
+    }
+
+    function removeFromCart(id){
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+      renderCart();
+    }
+
+    function renderCart(){
+      const count = cart.reduce((sum,item) => sum + item.qty, 0);
+      cartCount.textContent = count;
+
+      if(!cart.length){
+        cartItems.innerHTML = '<div class="cart-empty">Your cart is empty.<br><br>Add something your best friend will love.</div>';
+        subtotal.textContent = money(0);
+        return;
+      }
+
+      let total = 0;
+      cartItems.innerHTML = cart.map(item => {
+        const p = PRODUCTS.find(x => x.id === item.id);
+        const line = p.price * item.qty;
+        total += line;
+        return `
+          <div class="cart-item">
+            <img src="${p.image}" alt="">
+            <div>
+              <h4>${p.name} × ${item.qty}</h4>
+              <p>${money(line)}</p>
+            </div>
+            <button class="remove" data-remove="${p.id}">Remove</button>
+          </div>
+        `;
+      }).join("");
+
+      subtotal.textContent = money(total);
+      $$("[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => removeFromCart(Number(btn.dataset.remove)));
+      });
+    }
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function openCart(){ cartDrawer.classList.add("open"); }
+    function closeCart(){ cartDrawer.classList.remove("open"); }
+
+    $("#cartOpen").addEventListener("click", openCart);
+    $("#cartClose").addEventListener("click", closeCart);
+
+    $("#checkoutBtn").addEventListener("click", () => {
+      if(!cart.length){
+        showToast("Your cart is empty");
+        return;
+      }
+      const lines = cart.map(item => {
+        const p = PRODUCTS.find(x => x.id === item.id);
+        return `• ${p.name} × ${item.qty} — ${money(p.price * item.qty)}`;
+      });
+      const total = cart.reduce((sum,item) => {
+        const p = PRODUCTS.find(x => x.id === item.id);
+        return sum + p.price * item.qty;
+      },0);
+      const message = `Hello Paws & Whiskers! I'd like to order:%0A%0A${encodeURIComponent(lines.join("\n"))}%0A%0ATotal: ${encodeURIComponent(money(total))}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
+    });
+
+    /* Mobile menu */
+    const mobileMenu = $("#mobileMenu");
+    $("#menuOpen").addEventListener("click", () => mobileMenu.classList.toggle("open"));
+    $$("#mobileMenu a").forEach(a => a.addEventListener("click", () => mobileMenu.classList.remove("open")));
+
+    /* Theme */
+    const savedTheme = localStorage.getItem("paws_theme");
+    if(savedTheme === "light") document.documentElement.classList.add("light");
+    $("#themeToggle").addEventListener("click", () => {
+      document.documentElement.classList.toggle("light");
+      const theme = document.documentElement.classList.contains("light") ? "light" : "dark";
+      localStorage.setItem("paws_theme", theme);
+    });
+
+    /* Reveal-on-scroll */
+    let observer;
+    function observeReveals(){
+      if(!("IntersectionObserver" in window)){
+        $$(".reveal").forEach(el => el.classList.add("visible"));
+        return;
+      }
+      if(observer) observer.disconnect();
+      observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold:.12});
+      $$(".reveal:not(.visible)").forEach(el => observer.observe(el));
+    }
+
+    /* Cursor glow — disabled for touch screens */
+    const glow = $("#cursorGlow");
+    if(window.matchMedia("(pointer:fine)").matches){
+      window.addEventListener("pointermove", e => {
+        glow.style.left = e.clientX + "px";
+        glow.style.top = e.clientY + "px";
+      });
+    }else{
+      glow.remove();
+    }
+
+    /* WhatsApp CTA */
+    const waMessage = encodeURIComponent("Hello Paws & Whiskers! I'd like to know more about your products and services.");
+    $("#whatsappCta").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
+
+    $("#year").textContent = new Date().getFullYear();
+
+    /* Preloader */
+    window.addEventListener("load", () => {
+      setTimeout(() => $("#preloader").classList.add("hide"), 650);
+      observeReveals();
+    });
+
+    renderProducts();
+    renderCart();
+
+    /* Close cart with Escape */
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape"){
+        closeCart();
+        mobileMenu.classList.remove("open");
+      }
+    });
+  </script>
+</body>
+</html>
